@@ -1,6 +1,12 @@
 #!/bin/sh
 set -eu
 
+# Railway / Render / Fly.io inject a PORT env var.
+# Bridge it to RESIN_PORT so Resin listens on the platform-assigned port.
+if [ -n "${PORT:-}" ] && [ -z "${RESIN_PORT:-}" ]; then
+  export RESIN_PORT="$PORT"
+fi
+
 cache_dir="${RESIN_CACHE_DIR:-/var/cache/resin}"
 state_dir="${RESIN_STATE_DIR:-/var/lib/resin}"
 log_dir="${RESIN_LOG_DIR:-/var/log/resin}"
